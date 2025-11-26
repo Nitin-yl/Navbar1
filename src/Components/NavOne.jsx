@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FiMenu, FiX, FiLayers, FiCode } from "react-icons/fi";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { FiLayers, FiCode } from "react-icons/fi";
 import { HiOutlineSparkles } from "react-icons/hi2";
+import { Home, Briefcase, FlaskConical, BookOpen } from "lucide-react";
 
 const ProjectUILogo = ({ mobile = false, onClick }) => (
   <div
@@ -56,125 +57,131 @@ const ProjectUILogo = ({ mobile = false, onClick }) => (
 );
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
   const links = ["Work", "About", "Playground", "Resource"];
+  const [active, setActive] = useState("Home");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: "easeOut" }}
-      className="fixed top-4 left-1/2 -translate-x-1/2 z-50 
-                 flex items-center justify-between
-                 bg-black/30 backdrop-blur-2xl
-                 border border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.45)]
-                 px-5 sm:px-7 py-3
-                 w-[92%] sm:w-[84%] lg:w-[75%] max-w-5xl
-                 rounded-2xl"
-    >
-      <ProjectUILogo />
-
-      <ul className="hidden lg:flex gap-8 text-sm font-medium">
-        {links.map((link, i) => (
-          <motion.li
-            key={link}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.12 * i }}
-          >
-            <a
-              href="#"
-              className="relative group text-gray-200 hover:text-white transition"
-            >
-              {link}
-              <span className="absolute left-0 -bottom-1 h-0.5 w-0 bg-cyan-300 group-hover:w-full transition-all duration-300" />
-            </a>
-          </motion.li>
-        ))}
-      </ul>
-
-      <motion.a
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.94 }}
-        href="#"
-        className="hidden lg:block bg-white text-black px-5 py-1.5 rounded-full text-sm font-semibold shadow-md"
+    <>
+      <motion.nav
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
+        className={`fixed top-4 left-1/2 -translate-x-1/2 z-9998
+                    px-5 sm:px-7 py-3 w-[92%] sm:w-[84%] lg:w-[75%] max-w-5xl
+                    rounded-2xl flex items-center justify-between border 
+                    transition-all duration-300 backdrop-blur-2xl shadow-xl
+                    ${
+                      scrolled
+                        ? "bg-black/60 border-white/20"
+                        : "bg-black/30 border-white/10"
+                    }`}
       >
-        Login
-      </motion.a>
+        <div className="flex lg:hidden w-full items-center justify-between">
+          <ProjectUILogo mobile />
 
-      <button
-        className="lg:hidden text-3xl text-white"
-        onClick={() => setOpen(!open)}
-      >
-        {open ? <FiX /> : <FiMenu />}
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.25 }}
-            className="absolute left-0 top-full mt-4 w-full
-                       bg-black/30 backdrop-blur-2xl
-                       border border-white/10
-                       rounded-3xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.45)]
-                       lg:hidden"
+          <a
+            href="#"
+            className="bg-white text-black px-4 py-1.5 rounded-full 
+                       text-sm font-semibold shadow-md"
           >
-            <motion.ul
-              initial="hidden"
-              animate="show"
-              variants={{
-                hidden: {},
-                show: { transition: { staggerChildren: 0.12 } },
-              }}
-              className="flex flex-col gap-5 text-lg font-medium"
-            >
-              {links.map((link) => (
-                <motion.li
-                  key={link}
-                  variants={{
-                    hidden: { opacity: 0, y: 12 },
-                    show: { opacity: 1, y: 0 },
-                  }}
-                >
-                  <a
-                    href="#"
-                    onClick={() => setOpen(false)}
-                    className="block text-gray-200 hover:text-white transition"
-                  >
-                    {link}
-                  </a>
-                </motion.li>
-              ))}
+            Get Started
+          </a>
+        </div>
 
-              <motion.li
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  show: { opacity: 1, y: 0 },
-                }}
+        <div className="hidden lg:flex">
+          <ProjectUILogo />
+        </div>
+
+        <ul className="hidden lg:flex gap-8 text-sm font-medium">
+          {links.map((link, i) => (
+            <motion.li
+              key={link}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12 * i }}
+            >
+              <a
+                href="#"
+                className="relative group text-gray-200 hover:text-white transition"
               >
-                <a
-                  href="#"
-                  onClick={() => setOpen(false)}
-                  className="block text-center bg-white text-black py-2 rounded-full font-semibold mt-2 shadow-md hover:bg-gray-100"
-                >
-                  Login
-                </a>
-              </motion.li>
-            </motion.ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                {link}
+                <span
+                  className="absolute left-0 -bottom-1 h-0.5 w-0 bg-cyan-300 
+                                 group-hover:w-full transition-all duration-300"
+                />
+              </a>
+            </motion.li>
+          ))}
+        </ul>
 
-      <motion.div
-        className="absolute -bottom-3 left-1/2 -translate-x-1/2 
-                   w-[55%] sm:w-[60%] h-1.5 rounded-full 
-                   bg-linear-to-r from-cyan-300/40 via-white/40 to-cyan-300/40 blur-md"
-        animate={{ opacity: [0.4, 1, 0.4], scale: [0.95, 1.05, 0.95] }}
-        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-      />
-    </motion.nav>
+        <motion.a
+          whileHover={{ scale: 1.07 }}
+          whileTap={{ scale: 0.94 }}
+          href="#"
+          className="hidden lg:block bg-white text-black px-5 py-1.5 
+                     rounded-full text-sm font-semibold shadow-md"
+        >
+          Login
+        </motion.a>
+
+        <motion.div
+          className="absolute -bottom-3 left-1/2 -translate-x-1/2 
+                     w-[55%] sm:w-[60%] h-1.5 rounded-full 
+                     bg-linear-to-r from-cyan-300/40 via-white/40 to-cyan-300/40 blur-md"
+          animate={{ opacity: [0.4, 1, 0.4], scale: [0.95, 1.05, 0.95] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </motion.nav>
+
+      <div
+        className="lg:hidden fixed bottom-4 left-1/2 -translate-x-1/2 
+                   w-[92%] px-4 py-3 rounded-2xl
+                   bg-black/30 backdrop-blur-2xl 
+                   border border-white/10
+                   shadow-[0_8px_40px_rgba(0,0,0,0.55)]
+                   flex items-center justify-between 
+                   z-9999 pointer-events-auto"
+      >
+        {[
+          { name: "Home", icon: <Home size={18} /> },
+          { name: "Work", icon: <Briefcase size={18} /> },
+          { name: "Playground", icon: <FlaskConical size={18} /> },
+          { name: "Resource", icon: <BookOpen size={18} /> },
+        ].map((item) => (
+          <button
+            key={item.name}
+            onClick={() => setActive(item.name)}
+            className="flex flex-col items-center gap-1 relative"
+          >
+            <span
+              className={`transition ${
+                active === item.name
+                  ? "text-cyan-300 drop-shadow-[0_0_8px_rgba(0,255,255,0.7)]"
+                  : "text-gray-300"
+              }`}
+            >
+              {item.icon}
+            </span>
+
+            <span
+              className={`text-[11px] font-medium transition ${
+                active === item.name ? "text-cyan-300" : "text-gray-300"
+              }`}
+            >
+              {item.name}
+            </span>
+          </button>
+        ))}
+      </div>
+    </>
   );
 }
