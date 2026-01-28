@@ -19,17 +19,9 @@ const ProjectUILogo = ({ mobile = false, onClick }) => (
                      rounded-xl shadow-lg
                      bg-linear-to-br from-cyan-300 via-blue-400 to-cyan-500"
         >
-          <FiLayers
-            size={20}
-            className="absolute text-white opacity-100 -translate-y-0.5"
-          />
           <FiCode
             size={16}
             className="absolute text-white opacity-90 translate-y-1"
-          />
-          <HiOutlineSparkles
-            size={12}
-            className="absolute text-white opacity-95 top-1.5 right-1.5"
           />
         </motion.div>
 
